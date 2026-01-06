@@ -38,8 +38,18 @@ def simulate(runs=10000000):
     return p_strictly_increasing, p_increasing
 
 def analytical_prob():
+    # Selecting k distinct balls from n and 
+    # they can be uniquely arranged in one strictly increasing way
     p_strictly_increasing = C(n, k) / (n**k)
+
+    # Selecting k balls from n with repetition allowed
+    # They can be arranged in increasing order in one unique way
+    # With repetition allowed, the number of ways to choose k balls 
+    # from n balls is just the number of ways to put k indistinguishable balls
+    # into n distinguishable boxes which is C(n + k - 1, k)
     p_increasing = C(n + k - 1, k) / (n**k)
+
+
     return p_strictly_increasing, p_increasing
 
 p_strictly_increasing, p_increasing = simulate()
