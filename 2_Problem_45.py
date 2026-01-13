@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 n = 5000
 p = np.linspace(0, 1, 500)
 
-def monty_hall_simulation(switch, p, trials=10000):
+def monty_hall_simulation(p, trials=10000):
     wins = 0
     monty_open_2 = 0
     monty_opens_2_and_wins = 0
@@ -21,9 +21,9 @@ def monty_hall_simulation(switch, p, trials=10000):
         monty_opens = np.random.choice(monty_options)
 
 
-        if switch:
-            remaining_doors = [i for i in range(3) if i != contestant_choice and i != monty_opens]
-            contestant_choice = remaining_doors[0]
+        # Switching strategy
+        remaining_doors = [i for i in range(3) if i != contestant_choice and i != monty_opens]
+        contestant_choice = remaining_doors[0]
 
 
         if monty_opens == 1:
@@ -40,25 +40,23 @@ def monty_hall_simulation(switch, p, trials=10000):
 def plot():
 
     switch_win_conditional_probs = []
-    y_switch = []
+    y_switch = 2 * p / (1 + p)
 
     for prob in p:
-        switch_wins, switch_trials, switch_monty_open_2, switch_monty_open_2_and_wins = monty_hall_simulation(True, prob, n)
+        _, _, switch_monty_open_2, switch_monty_open_2_and_wins = monty_hall_simulation(prob, n)
 
         switch_win_conditional_probs.append(switch_monty_open_2_and_wins / switch_monty_open_2 if switch_monty_open_2 > 0 else 0)
-
-        y_switch.append((2 * prob) / (1 + prob))
 
     plt.plot(p, switch_win_conditional_probs, label='Monty Opens 2 to reveal Goat', color='green', linestyle='--')
     plt.plot(p, y_switch, label='Theoretical solution', color='orange', linestyle='-.')
     plt.xlabel('Probability of Car Behind a Door (p)')
     plt.ylabel('Probability of Winning')
-    plt.title('Monty Hall Problem: Switching vs Staying')
+    plt.title('Modified Monty Hall Problem with Car in each door with probability p')
     plt.legend()
     plt.grid()
     plt.show()
 
-switch_wins, switch_trials, switch_monty_open_2, switch_monty_open_2_and_wins = monty_hall_simulation(True, 0.5, n)
+switch_wins, switch_trials, switch_monty_open_2, switch_monty_open_2_and_wins = monty_hall_simulation(0.5, n)
 print("Switching Strategy:")
 print("Total Wins:", switch_wins)
 print("Total Trials:", switch_trials)
